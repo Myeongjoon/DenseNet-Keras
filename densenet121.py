@@ -106,7 +106,7 @@ def conv_block(x, stage, branch, nb_filter, dropout_rate=None, weight_decay=1e-4
     x = Scale(axis=concat_axis, name=conv_name_base+'_x2_scale')(x)
     x = Activation('relu', name=relu_name_base+'_x2')(x)
     x = ZeroPadding2D((1, 1), name=conv_name_base+'_x2_zeropadding')(x)
-    x = Conv2D(nb_filter, 3, 3, name=conv_name_base+'_x2', use_bias=False)(x)
+    x = Conv2D(nb_filter, (3, 3), name=conv_name_base+'_x2', use_bias=False)(x)
 
     if dropout_rate:
         x = Dropout(dropout_rate)(x)
@@ -133,7 +133,7 @@ def transition_block(x, stage, nb_filter, compression=1.0, dropout_rate=None, we
     x = BatchNormalization(epsilon=eps, axis=concat_axis, name=conv_name_base+'_bn')(x)
     x = Scale(axis=concat_axis, name=conv_name_base+'_scale')(x)
     x = Activation('relu', name=relu_name_base)(x)
-    x = Convolution2D(int(nb_filter * compression), 1, 1, name=conv_name_base, bias=False)(x)
+    x = Conv2D(int(nb_filter * compression), (1, 1), name=conv_name_base, use_bias=False)(x)
 
     if dropout_rate:
         x = Dropout(dropout_rate)(x)
